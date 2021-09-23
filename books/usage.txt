@@ -1,0 +1,60 @@
+Authors: Anders Shenholm, Simon Hempel-Costello
+
+Name
+	authorsearch, as  -- list authors whose name contains a certain letter
+ 
+Synopsis
+
+	as [OPTION]... [TARGET CHARACTER ] ....
+
+Description
+	
+	Given a search string S, print a list of authors whose names contain S (case-insensitive). For each such author, print a list of the author's books. Authors should be printed in alphabetical order by surname, breaking ties by using given name (e.g. Ann Brontë comes before Charlotte Brontë).
+
+
+
+Name 
+
+	titlesearch or ts - search for titles containing a given string
+Synopsis
+	
+	ts [OPTION]... [TARGET WORD] ... 
+
+Description
+
+	Given a search string S, print a list of books whose titles contain S (case-insensitive). Books may be sorted by title (by default) or by publication year. 
+	The following options are available
+
+
+	-t, --sorttitle,
+		sort entries alphabetically by title
+	-d, --sortdate
+		sort entries in increasing order of date
+
+
+
+Name 
+	man - display the manual pages of commands
+
+Synopsis
+
+	man [FUNCTION] ...
+
+Description 
+
+	man prints a description of the specified command with usage information.
+
+
+
+Name
+
+	datesearch or ds - search for titles between two given dates
+
+Synopsis
+
+	ds [OPTION]... [ START DATE]… [END DATE]... 
+ 
+Description
+
+	Given a range of years A to B, print a list of books published between years A and B, inclusive. Books should be printed in order of publication year.
+
