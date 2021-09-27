@@ -1,11 +1,17 @@
 Authors: Anders Shenholm, Simon Hempel-Costello
 
+Usage: python3 books.py <COMMAND>
+
+
+The different options for commands are as follows
+
+
 Name
-	authorsearch, as  -- list authors whose name contains a certain letter
+	authorsearch, as  -- list authors whose name contains a certain character or character string
  
 Synopsis
 
-	as [OPTION]... [TARGET CHARACTER ] ....
+	python3 as [OPTION] [TARGET STRING]
 
 Description
 	
@@ -18,11 +24,13 @@ Name
 	titlesearch or ts - search for titles containing a given string
 Synopsis
 	
-	ts [OPTION]... [TARGET WORD] ... 
+	python3 books.py ts [OPTION] [TARGET WORD] 
 
 Description
 
-	Given a search string S, print a list of books whose titles contain S (case-insensitive). Books may be sorted by title (by default) or by publication year. 
+	Given a search string S, print a list of books whose titles contain S (case-insensitive). 
+	Books may be sorted by title (by default) or by publication year.
+ 
 	The following options are available
 
 
@@ -34,15 +42,15 @@ Description
 
 
 Name 
-	man - display the manual pages of commands
+	help - display the basic description of commands and common use cases
 
 Synopsis
 
-	man [FUNCTION] ...
+	python3 books.py help [FUNCTION]
 
 Description 
 
-	man prints a description of the specified command with usage information.
+	help prints a description of the specified command with usage information.
 
 
 
@@ -52,9 +60,10 @@ Name
 
 Synopsis
 
-	ds [OPTION]... [ START DATE]… [END DATE]... 
+	python3 books.py ds [OPTION] <START DATE> [END DATE] 
  
 Description
 
-	Given a range of years A to B, print a list of books published between years A and B, inclusive. Books should be printed in order of publication year.
+	Given a range of years A to B, print a list of books published between years A and B or after 
+	A if B is not given, inclusive. Books should be printed in order of publication year.
 
