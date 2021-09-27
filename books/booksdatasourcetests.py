@@ -12,11 +12,9 @@ class BooksDataSourceTester(unittest.TestCase):
 
     def tearDown(self):
         pass
-
     def test_unique_author_len(self):
         authors = self.data_source.authors('Pratchett')
         self.assertTrue(len(authors) == 1)
-
     def test_unique_author_name(self):
         authors = self.data_source.authors('Pratchett')
         self.assertTrue(authors[0] == booksdatasource.Author('Pratchett', 'Terry'))
@@ -48,8 +46,10 @@ class BooksDataSourceTester(unittest.TestCase):
 
     def test_null_author_entry(self):
         self.assertRaises(ValueError, self.data_source.authors,'')
+
     def test_null_date_entry(self):
         self.assertRaises(ValueError, self.data_source.books_between_years,'')
+
     def test_non_unique_title_len(self):
         books = self.data_source.books('street')
         self.assertTrue(len(books)==2)
@@ -75,18 +75,21 @@ class BooksDataSourceTester(unittest.TestCase):
         self.assertTrue(len(authors) == 3)
 
     def test_non_unique_author_name(self):
-        authors = self.data_source.authors('Pratchett')
+        authors = self.data_source.authors('Brontë')
         self.assertTrue(authors[0] == booksdatasource.Author('Brontë', 'Ann')and authors[1] == booksdatasource.Author('Brontë', 'Charlotte') and authors[2] ==booksdatasource.Author('Brontë', 'Emily'))
+
     def test_date_return_unique_len(self):
         books = self.data_source.books_between_years(1848, 1849)
-        self.assertTrue(len(books) == 0)
+        self.assertTrue(len(books) == 1)
+
     def test_date_return_unique_name(self):
         books = self.data_source.books_between_years(1848, 1849)
         author = booksdatasource.Author('Bronte', 'Ann')
         author_list = [author]
         self.assertTrue(books[0] == booksdatasource.Book('The Tenant of Wildfell Hall',1848,author_list))
-    def test_date_return_unique_name(self):
-        books = self.data_source.books_between_years(2020,2020)
+        
+    def test_date_return_non_unique_name(self):
+        books = self.data_source.books_between_years(2020, None)
         author_schwab = booksdatasource.Author('Schwab', 'V.E.')
         author_list_schwab = [author_schwab]
         author_orenstein = booksdatasource.Author('Orenstein', 'Peggy')
