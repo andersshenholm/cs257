@@ -1,6 +1,6 @@
 '''
    booksdatasourcetest.py
-   Jeff Ondich, 24 September 2021
+    Simon Hempel-Costello, Anders Shenholm, 24 September 2021
 '''
 
 import booksdatasource
@@ -73,7 +73,6 @@ class BooksDataSourceTester(unittest.TestCase):
     def test_non_unique_author_len(self):
         authors = self.data_source.authors('Brontë')
         self.assertTrue(len(authors) == 3)
-#test comment
     def test_non_unique_author_name(self):
         authors = self.data_source.authors('Brontë')
         self.assertTrue(authors[0] == booksdatasource.Author('Brontë', 'Ann')and authors[1] == booksdatasource.Author('Brontë', 'Charlotte') and authors[2] ==booksdatasource.Author('Brontë', 'Emily'))
