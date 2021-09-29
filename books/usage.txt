@@ -11,7 +11,7 @@ Name
  
 Synopsis
 
-	python3 as [OPTION] [TARGET STRING]
+	python3 books.py as [OPTION] [TARGET STRING]
 
 Description
 	
