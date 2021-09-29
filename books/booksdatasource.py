@@ -36,6 +36,29 @@ class Book:
 
 class BooksDataSource:
     def __init__(self, books_csv_file_name):
+        #want to parse csv for all info needed for below methods (4 things for each other, 3 for each book)     
+        #wrote code not considering having to iterate through lines
+        if (books_csv_file_name[0] == '"'):
+           progress = books_csv_file_name.index('"')
+           title = books_csv_file_name.substring[1,progress]
+           print (title)
+        else:
+           progress = books_csv_file_name.index(',') + 1
+           title = books_csv_file_name.substring[0, progress - 1]
+	
+        print (title)
+        #any reason publication_year should be int? 
+        publication_year = books_csv_file_name.substring[progress, books_csv_file_name.index(",", progress)]
+        progress = books_csv_file_name.index(",", progress)
+        #authors
+	#author first name
+        #author last name
+	#author birthdate
+	#author deathdate
+
+	#make a book object
+        #make an author object	
+
         ''' The books CSV file format looks like this:
 
                 title,publication_year,author_description
@@ -49,7 +72,6 @@ class BooksDataSource:
             suitable instance variables for the BooksDataSource object containing
             a collection of Author objects and a collection of Book objects.
         '''
-        pass
 
     def authors(self, search_text=None):
         ''' Returns a list of all the Author objects in this data source whose names contain
