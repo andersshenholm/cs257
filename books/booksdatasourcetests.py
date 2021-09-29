@@ -45,12 +45,15 @@ class BooksDataSourceTester(unittest.TestCase):
         self.assertRaises(ValueError, self.data_source.books, '')
 
     def test_null_author_entry(self):
+        #find way of testing to make sure entire list is posted
         self.assertRaises(ValueError, self.data_source.authors,'')
 
     def test_null_date_entry(self):
+        #find way of testing to make sure entire list is posted
         self.assertRaises(ValueError, self.data_source.books_between_years,'')
 
     def test_non_unique_title_len(self):
+        #find way of testing to make sure entire list is posted
         books = self.data_source.books('street')
         self.assertTrue(len(books)==2)
 

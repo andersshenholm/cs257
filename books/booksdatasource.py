@@ -19,6 +19,10 @@ class Author:
     def __eq__(self, other):
         ''' For simplicity, we're going to assume that no two authors have the same name. '''
         return self.surname == other.surname and self.given_name == other.given_name
+    def __str__(self) -> str:
+        return self.surname + "," + self.given_name + "," +str(self.birth_year) + ","+ str(self.death_year) 
+    def __repr__(self) -> str:
+        return self.__str__()
 
 class Book:
     def __init__(self, title='', publication_year=None, authors=[]):
@@ -49,7 +53,39 @@ class BooksDataSource:
             suitable instance variables for the BooksDataSource object containing
             a collection of Author objects and a collection of Book objects.
         '''
+        self.books_by_author = []
+        self.books_by_date = []
+        self.authors_by_book = []
+        with open(books_csv_file_name) as file:
+            csvreader = csv.reader(file)
+            for row in csvreader:
+               print( self.parse_authors_from_csv_entry(row[2]))    
         pass
+    def parse_authors_from_csv_entry(self, input_entry):
+        and_substring = 'and'
+        author_list = []
+        if and_substring in input_entry:
+            and_offset = 4
+            pre_and_substring = input_entry[:input_entry.index(and_substring)]
+            post_and_substring = input_entry[input_entry.index(and_substring) + and_offset:]
+            pre_string_author = self.author_from_string(pre_and_substring)
+            author_list.append(pre_string_author)
+            if(and_substring in post_and_substring):
+                print('hi')
+                author_list.extend(self.parse_authors_from_string(post_and_substring))
+            else:
+                post_string_author = self.author_from_string(post_and_substring)
+                author_list.append(post_string_author)
+        else:
+            input_author = self.author_from_string(input_entry)
+
+            author_list.append(input_author)
+        return author_list
+    def author_from_string(self, input_string):
+        author  = Author(input_string[input_string.index(" ")+1:input_string.index("(")-1], input_string[:input_string.index(" ")], (input_string[input_string.index("(")+1 : input_string.index("-")]), (input_string[input_string.index("-")+1 : input_string.index(")")]))
+        return author
+
+
 
     def authors(self, search_text=None):
         ''' Returns a list of all the Author objects in this data source whose names contain
