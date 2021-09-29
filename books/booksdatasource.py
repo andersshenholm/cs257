@@ -20,7 +20,7 @@ class Author:
         ''' For simplicity, we're going to assume that no two authors have the same name. '''
         return self.surname == other.surname and self.given_name == other.given_name
     def __str__(self) -> str:
-        return self.surname + "," + self.given_name + "," +str(self.birth_year) + ","+ str(self.death_year) 
+        return self.surname + "," + self.given_name + ",(" +str(self.birth_year) + "-"+ str(self.death_year) +")"
     def __repr__(self) -> str:
         return self.__str__()
 
@@ -37,6 +37,16 @@ class Book:
             no two books have the same title, so "same title" is the same
             thing as "same book". '''
         return self.title == other.title
+    def __str__(self) -> str:
+        return self.title + "," + str(self.publication_year) + "," + str(self.authors)
+    def __repr__(self) -> str:
+        return self.__str__()
+    def title(self):
+        return self.title
+    def authors(self):
+        return self.authors
+    def publication_year(self):
+        return self.publication_year
 
 class BooksDataSource:
     def __init__(self, books_csv_file_name):
@@ -66,13 +76,15 @@ class BooksDataSource:
             suitable instance variables for the BooksDataSource object containing
             a collection of Author objects and a collection of Book objects.
         '''
-        self.books_by_author = []
-        self.books_by_date = []
-        self.authors = []
+        self.book_list = []
+        self.author_list = []
         with open(books_csv_file_name) as file:
             csvreader = csv.reader(file)
             for row in csvreader:
-                self.authors.append(self.parse_authors_from_csv_entry(row[2]))
+                input_author = self.parse_authors_from_csv_entry(row[2])
+                self.author_list.append(input_author)
+                input_book = Book(row[0],int(row[1]),input_author)
+                self.book_list.append(input_book)
         pass
     def parse_authors_from_csv_entry(self, input_entry):
         #TODO add comments explaining what on gods green earth is going on here. 
@@ -85,7 +97,7 @@ class BooksDataSource:
             pre_string_author = self.author_from_string(pre_and_substring)
             author_list.append(pre_string_author)
             if(and_substring in post_and_substring):
-                #BROOOOOOOOOOOOO RECURSION AND IT WORKS! RECURSIVE STRING SANITATION
+                #BROOOOOOOOOOOOO RECURSION AND IT WORKS! RECURSIVE STRING SANITATION!
                 author_list.extend(self.parse_authors_from_csv_entry(post_and_substring))
             else:
                 post_string_author = self.author_from_string(post_and_substring)
@@ -124,11 +136,17 @@ class BooksDataSource:
                 default -- same as 'title' (that is, if sort_by is anything other than 'year'
                             or 'title', just do the same thing you would do for 'title')
         '''
-        dave = Author('dave', 'smith')
-        authors = [dave, dave, dave, dave, dave, dave, dave, dave]
-        test = Book('this is a test book', 2021, authors )
-        return [test, test, test, test, test, test, test, test]
-
+        
+        if(search_text == None):
+            return self.book_list
+        else:
+            input_text = search_text.lower()
+            output_list = []
+            for b in self.book_list:
+                title = b.title.lower()
+                if(input_text in title):
+                    output_list.append(b)
+            return output_list    
     def books_between_years(self, start_year=None, end_year=None):
         ''' Returns a list of all the Book objects in this data source whose publication
             years are between start_year and end_year, inclusive. The list is sorted
@@ -140,10 +158,10 @@ class BooksDataSource:
             during start_year should be included. If both are None, then all books
             should be included.
         '''
-        dave = Author('dave', 'smith')
-        authors = [dave, dave, dave, dave, dave, dave, dave, dave]
-        test = Book('this is a test book', 2021, authors )
-        return [test,test,test,test,test]
-  
+       
+        return self.book_list
+    def all_books(self):
+        return self.book_list
+    def all_authors(self):
+        return self.author_list
 
-books =  BooksDataSource('books1.csv')

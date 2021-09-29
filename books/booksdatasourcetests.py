@@ -42,27 +42,28 @@ class BooksDataSourceTester(unittest.TestCase):
         self.assertTrue(books[0] == booksdatasource.Book('Good Omens', 1990, author_list))
 
     def test_null_title_entry(self):
-        self.assertRaises(ValueError, self.data_source.books, '')
+        books = self.data_source.books('')
+        self.assertTrue( books == self.data_source.all_books())
 
     def test_null_author_entry(self):
-        #find way of testing to make sure entire list is posted
-        self.assertRaises(ValueError, self.data_source.authors,'')
+        authors = self.data_source.authors('')
+        self.assertTrue( authors == self.data_source.all_authors())
 
     def test_null_date_entry(self):
-        #find way of testing to make sure entire list is posted
-        self.assertRaises(ValueError, self.data_source.books_between_years,'')
+        books = self.data_source.books('')
+        self.assertTrue( books == self.data_source.all_books())
 
     def test_non_unique_title_len(self):
-        #find way of testing to make sure entire list is posted
-        books = self.data_source.books('street')
+        books = self.data_source.books('Street')
         self.assertTrue(len(books)==2)
 
     def test_non_unique_title_names_alphabetical(self):
-        books = self.data_source.books('street', 'title')
+        books = self.data_source.books('Street', 'title')
         author_lewis = booksdatasource.Author('Lewis', 'Sinclair')
         author_baldwin = booksdatasource.Author('Baldwin','James')
         author_list_main_street = [author_lewis]
         author_list_beale = [author_baldwin]
+        print(books)
         self.assertTrue((books[0]  == booksdatasource.Book('If Beale Street Could Talk', 1974, author_list_beale)) and (books[1] == booksdatasource.Book('Main Street', 1920, author_list_main_street)))
 
     def test_non_unique_title_names_chronological(self):
