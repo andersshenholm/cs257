@@ -40,6 +40,19 @@ class Book:
 
 class BooksDataSource:
     def __init__(self, books_csv_file_name):
+        #want to parse csv for all info needed for below methods (4 things for each other, 3 for each book)     
+        #wrote code not considering having to iterate through lines
+        #any reason publication_year should be int? 
+        # in response to this I think comparison would be easier for date sort, but not necessarily
+        #authors
+	    #author first name
+        #author last name
+	    #author birthdate
+	    #author deathdate
+
+	    #make a book object
+        #make an author object	
+
         ''' The books CSV file format looks like this:
 
                 title,publication_year,author_description
@@ -55,13 +68,14 @@ class BooksDataSource:
         '''
         self.books_by_author = []
         self.books_by_date = []
-        self.authors_by_book = []
+        self.authors = []
         with open(books_csv_file_name) as file:
             csvreader = csv.reader(file)
             for row in csvreader:
-               print( self.parse_authors_from_csv_entry(row[2]))    
+                self.authors.append(self.parse_authors_from_csv_entry(row[2]))
         pass
     def parse_authors_from_csv_entry(self, input_entry):
+        #TODO add comments explaining what on gods green earth is going on here. 
         and_substring = 'and'
         author_list = []
         if and_substring in input_entry:
@@ -71,8 +85,8 @@ class BooksDataSource:
             pre_string_author = self.author_from_string(pre_and_substring)
             author_list.append(pre_string_author)
             if(and_substring in post_and_substring):
-                print('hi')
-                author_list.extend(self.parse_authors_from_string(post_and_substring))
+                #BROOOOOOOOOOOOO RECURSION AND IT WORKS! RECURSIVE STRING SANITATION
+                author_list.extend(self.parse_authors_from_csv_entry(post_and_substring))
             else:
                 post_string_author = self.author_from_string(post_and_substring)
                 author_list.append(post_string_author)
@@ -132,3 +146,4 @@ class BooksDataSource:
         return [test,test,test,test,test]
   
 
+books =  BooksDataSource('books1.csv')
