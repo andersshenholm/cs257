@@ -15,7 +15,6 @@ class Author:
         self.given_name = given_name
         self.birth_year = birth_year
         self.death_year = death_year
-
     def __eq__(self, other):
         ''' For simplicity, we're going to assume that no two authors have the same name. '''
         return self.surname == other.surname and self.given_name == other.given_name
@@ -23,6 +22,14 @@ class Author:
         return self.surname + "," + self.given_name + ",(" +str(self.birth_year) + "-"+ str(self.death_year) +")"
     def __repr__(self) -> str:
         return self.__str__()
+    def given_name(self):
+        return self.given_name
+    def birth_year(self):
+        return self.birth_year
+    def death_year(self):
+        return self.death_year
+    def surname(self):
+        return self.surname
 
 class Book:
     def __init__(self, title='', publication_year=None, authors=[]):
@@ -37,6 +44,7 @@ class Book:
             no two books have the same title, so "same title" is the same
             thing as "same book". '''
         return self.title == other.title
+
     def __str__(self) -> str:
         return self.title + "," + str(self.publication_year) + "," + str(self.authors)
     def __repr__(self) -> str:
@@ -81,9 +89,11 @@ class BooksDataSource:
         with open(books_csv_file_name) as file:
             csvreader = csv.reader(file)
             for row in csvreader:
-                input_author = self.parse_authors_from_csv_entry(row[2])
-                self.author_list.append(input_author)
-                input_book = Book(row[0],int(row[1]),input_author)
+                input_authors = self.parse_authors_from_csv_entry(row[2])
+                for a in input_authors:
+                    if(a not in self.author_list):
+                        self.author_list.append(a)
+                input_book = Book(row[0],int(row[1]),input_authors)
                 self.book_list.append(input_book)
         pass
     def parse_authors_from_csv_entry(self, input_entry):
@@ -119,9 +129,18 @@ class BooksDataSource:
             returns all of the Author objects. In either case, the returned list is sorted
             by surname, breaking ties using given name (e.g. Ann Brontë comes before Charlotte Brontë).
         '''
-        dave = Author('dave', 'smith')
-        #returning obvious filler value to test unit tests
-        return [dave, dave, dave, dave, dave, dave, dave, dave, dave]
+        output_list = []
+        input_text = search_text.lower()
+        for a in self.author_list:
+            last_name = a.surname.lower()
+            first_name = a.given_name.lower()
+            if(input_text in last_name or input_text in first_name):
+                output_list.append(a)
+        output_list = sorted(output_list, key = Author.given_name)
+        output_list = sorted(output_list, key = Author.surname)
+        return output_list
+
+        pass
 
 
     def books(self, search_text=None, sort_by='title'):
@@ -136,17 +155,17 @@ class BooksDataSource:
                 default -- same as 'title' (that is, if sort_by is anything other than 'year'
                             or 'title', just do the same thing you would do for 'title')
         '''
-        
-        if(search_text == None):
-            return self.book_list
+        input_text = search_text.lower()
+        output_list = []
+        for b in self.book_list:
+            title = b.title.lower()
+            if(input_text in title):
+                output_list.append(b)
+        if(sort_by == "year"):
+            output_list = sorted(output_list, key = Book.publication_year)
         else:
-            input_text = search_text.lower()
-            output_list = []
-            for b in self.book_list:
-                title = b.title.lower()
-                if(input_text in title):
-                    output_list.append(b)
-            return output_list    
+            output_list = sorted(output_list, key = Book.title)
+        return output_list    
     def books_between_years(self, start_year=None, end_year=None):
         ''' Returns a list of all the Book objects in this data source whose publication
             years are between start_year and end_year, inclusive. The list is sorted
@@ -158,8 +177,23 @@ class BooksDataSource:
             during start_year should be included. If both are None, then all books
             should be included.
         '''
-       
-        return self.book_list
+        end_date = 2400 #random future year
+        start_date = 0
+        if(end_year != None):
+            end_date = int(end_year)
+        if(start_year != None):
+            start_date = int(start_year)
+        output_list = []
+        for b in self.book_list:
+            if(b.publication_year>= start_date and b.publication_year <= end_date):
+                output_list.append(b)
+        #TODO verify that this not only seems to work but actually works, done with test2.csv, but further tests would be appreciated
+        output_list = sorted(output_list, key = Book.title)
+        output_list = sorted(output_list, key=Book.publication_year)
+        
+                
+        return output_list
+
     def all_books(self):
         return self.book_list
     def all_authors(self):
