@@ -105,7 +105,8 @@ class BooksDataSourceTester(unittest.TestCase):
         author_orenstein = booksdatasource.Author('Orenstein', 'Peggy')
         author_list_orenstein = [author_orenstein]
         self.assertTrue(books[0] == booksdatasource.Book('Boys and Sex',2020,author_list_orenstein) and books[1] ==booksdatasource.Book('The Invisible Life of Addie LaRue',2020,author_list_schwab))
-
+    def test_bad_date_input(self):
+        self.assertRaises(ValueError, self.data_source.books_between_years, "asdfadsadfs")
 if __name__ == '__main__':
     unittest.main()
 

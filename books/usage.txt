@@ -7,11 +7,11 @@ The different options for commands are as follows
 
 
 Name
-	authorsearch, as  -- list authors whose name contains a certain character or character string
+	--authorsearch, -as  -- list authors whose name contains a certain character or character string
  
 Synopsis
 
-	python3 books.py as [OPTION] [TARGET STRING]
+	python3 books.py -as [OPTION] [TARGET STRING]
 
 Description
 	
@@ -21,10 +21,10 @@ Description
 
 Name 
 
-	titlesearch or ts - search for titles containing a given string
+	--titlesearch or -ts - search for titles containing a given string
 Synopsis
 	
-	python3 books.py ts [OPTION] [TARGET WORD] 
+	python3 books.py -ts [OPTION] [TARGET WORD] 
 
 Description
 
@@ -42,11 +42,11 @@ Description
 
 
 Name 
-	help - display the basic description of commands and common use cases
+	--help, -h - display the basic description of commands and common use cases
 
 Synopsis
 
-	python3 books.py help [FUNCTION]
+	python3 books.py --help [FUNCTION]
 
 Description 
 
@@ -56,14 +56,14 @@ Description
 
 Name
 
-	datesearch or ds - search for titles between two given dates
+	--datesearch or -ds - search for titles between two given dates
 
 Synopsis
 
-	python3 books.py ds [OPTION] <START DATE> [END DATE] 
+	python3 books.py -ds [OPTION] [START DATE] [END DATE] 
  
 Description
 
-	Given a range of years A to B, print a list of books published between years A and B or after 
-	A if B is not given, inclusive. Books should be printed in order of publication year.
+	Given a range of years A to B, print a list of books published between years A and B. If a start date is not given, 
+	it searches for books that are before the end date, and if an end date is not given, then it searches for books after the start date
 

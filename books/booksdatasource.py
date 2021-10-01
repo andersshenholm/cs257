@@ -117,11 +117,10 @@ class BooksDataSource:
 
             author_list.append(input_author)
         return author_list
+
     def author_from_string(self, input_string):
         author  = Author(input_string[input_string.index(" ")+1:input_string.index("(")-1], input_string[:input_string.index(" ")], (input_string[input_string.index("(")+1 : input_string.index("-")]), (input_string[input_string.index("-")+1 : input_string.index(")")]))
         return author
-
-
 
     def authors(self, search_text=None):
         ''' Returns a list of all the Author objects in this data source whose names contain
@@ -129,8 +128,11 @@ class BooksDataSource:
             returns all of the Author objects. In either case, the returned list is sorted
             by surname, breaking ties using given name (e.g. Ann Brontë comes before Charlotte Brontë).
         '''
+        input_text = ''
+        if(search_text!=None):
+            input_text = search_text.lower()
+
         output_list = []
-        input_text = search_text.lower()
         for a in self.author_list:
             last_name = a.surname.lower()
             first_name = a.given_name.lower()
@@ -155,7 +157,9 @@ class BooksDataSource:
                 default -- same as 'title' (that is, if sort_by is anything other than 'year'
                             or 'title', just do the same thing you would do for 'title')
         '''
-        input_text = search_text.lower()
+        input_text = ''
+        if(search_text!=None):
+            input_text = search_text.lower()
         output_list = []
         for b in self.book_list:
             title = b.title.lower()
@@ -177,12 +181,14 @@ class BooksDataSource:
             during start_year should be included. If both are None, then all books
             should be included.
         '''
-        end_date = 2400 #random future year
+        end_date = 2021 #random future year
         start_date = 0
         if(end_year != None):
             end_date = int(end_year)
         if(start_year != None):
             start_date = int(start_year)
+       
+
         output_list = []
         for b in self.book_list:
             if(b.publication_year>= start_date and b.publication_year <= end_date):
