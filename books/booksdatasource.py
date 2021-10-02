@@ -78,13 +78,11 @@ class BooksDataSource:
         #then open the given file
         with open(books_csv_file_name) as file:
             csvreader = csv.reader(file)
-            #for each line
             for row in csvreader:
                 #take each author entry in the csv file and parse it into a list of authors dealing with the potential for ands
                 input_authors = self.parse_authors_from_csv_entry(row[2])
                 for a in input_authors:
                     if(a not in self.author_list):
-                        #if the author isn't in the list add it
                         self.author_list.append(a)
                 #create a book from the other two parts of the csv, and feed it the list generated from the authors
                 input_book = Book(row[0],int(row[1]),input_authors)
@@ -93,18 +91,13 @@ class BooksDataSource:
         pass
     def parse_authors_from_csv_entry(self, input_entry):
         and_substring = ' and '
-        #lenght of and + 1 for spacing
         and_offset = len(and_substring)
-        #new empty list
         author_list = []
         if and_substring in input_entry:
-            #create a string which is the input up until the first and
             pre_and_substring = input_entry[:input_entry.index(and_substring)]
-            #create a string which is the input after the first and
             post_and_substring = input_entry[input_entry.index(and_substring) + and_offset:]
             #Since we now know that the pre string is only one author, as each author is seperated by an and, then we can generate an author from the pre string
             pre_string_author = self.author_from_string(pre_and_substring)
-            #add that author to the list
             author_list.append(pre_string_author)
             #check if the post substring still contains ands, and if it does, run this method again on that and extend our author list with the return
             if(and_substring in post_and_substring):
@@ -115,7 +108,6 @@ class BooksDataSource:
                 post_string_author = self.author_from_string(post_and_substring)
                 author_list.append(post_string_author)
         else:
-            #if there is no and, just add the string to the list as an author object
             input_author = self.author_from_string(input_entry)
 
             author_list.append(input_author)
@@ -135,13 +127,10 @@ class BooksDataSource:
         #take your input text
         input_text = ''
         if(search_text!=None):
-            #put it all to lower case to make it case insensitive
             input_text = search_text.lower()
 
         output_list = []
-        #for each author
         for a in self.author_list:
-            #combine the two names to make the authors full name
             full_name = a.given_name.lower() + a.surname.lower()
             #check if the name is this full name
             if(input_text in full_name):
@@ -173,11 +162,9 @@ class BooksDataSource:
         '''
         input_text = ''
         if(search_text!=None):
-            #put text to lower case for case insensitivity
             input_text = search_text.lower()
         output_list = []
         for b in self.book_list:
-            #title also to lower case
             title = b.title.lower()
             if(input_text in title):
                 output_list.append(b)
@@ -209,7 +196,6 @@ class BooksDataSource:
                 start_date = int(start_year)
         except ValueError:
             raise ValueError("Integer Numbers must be inputted as dates")
-        #make sure that times match up
         if(start_date>end_date):
             raise ValueError("Start date must be before end date")
         output_list = []
