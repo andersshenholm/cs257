@@ -1,65 +1,93 @@
+'''
+    booksdatasourcetest.py
+    10/2/2021
+
+    Simon Hempel-Costello, Anders Shenholm
+'''
 import booksdatasource
-<<<<<<< HEAD
 import sys
 import argparse
-class Books:
-    def __init__(self):
-        self.data_source = booksdatasource.BooksDataSource("books1.csv")
-        parser = argparse.ArgumentParser(description= "Commands for searching and sorting for books")
-        parser.add_argument('--authorsearch', '-a', help = 'searches for authors whose names contain the given string', nargs = '+')
-        parser.add_argument('--titlesearch', '-t', help = 'searches for books with titles that contain the given string' )
-        parser.add_argument('--datesearch', '-d', help = 'searches for books which were published between the two given dates' )
-        parser.set_defaults(authorsearch = '')
-        args = parser.parse_args()
-        if(args.authorsearch):
-            output_list = []
-            for a in args.authorsearch:
-                output_list.append(self.data_source.authors(a))
-            print(output_list)
-
-       
-b = Books() 
-=======
-#from what I can tell this is the best option for processing cli arguments
 import sys
+class Books:
 
-def parse_args():
-    args = sys.argv
-    
-    if args exactly 2 in length and one arg asks for help, 
-        print_usage()
-        return
-    
+    def __init__(self):
+        args = self.get_arguements('books1.csv')
+        self.handle_arguements(args)
+    def get_arguements(self, file_string):
+        self.data_source = booksdatasource.BooksDataSource(file_string)
+        parser = argparse.ArgumentParser('handle books commands')
+        subparsers = parser.add_subparsers(description = 'commands')
+        #Break parsing into 3 subparsers for explicity in code definition
+        title_parser = subparsers.add_parser('titlesearch',help = 'Given a search string S, print a list of books whose titles contain S (case-insensitive). Books may be sorted by title (by default) or by publication year.')
+        title_parser.add_argument(
+            'titlesearch',
+            help = 'search for books which have names that contain the following character string',
+            default  = '',
+            nargs='?',
 
-    
-    authorsearch, titlesearch, datesearch = None, None, None
+        )
+        #call for date sort
+        title_parser.add_argument(
+            '-y',
+            help = 'sort books by year',
+            default  = '',
+            action='store_true'
 
-    commandcount = 0
-    if 'titlesearch' in args:
-            commandcount+=1
-    if 'ts' in args:
-            commandcount+=1
-    if 'authorsearch' in args:
-            commandcount+=1
-    if 'as' in args:
-            commandcount+=1
-    if 'datesearch' in args:
-            commandcount+=1
-    if 'ds' in args:
-            commandcount+=1
-    print(commandcount)
-    if commandcount != 1:
-        print("The books program accepts exactly one command argument. Access the usage document with -h, --help")
-       
-                  
-parse_args()
+        )
+        #parsing for author search
+        author_parser = subparsers.add_parser('authorsearch',help = 'Given a search string S, print a list of authors whose names contain S (case-insensitive)')
+        author_parser.add_argument(
+            'authorsearch',
+            #sorry for inconsistency here with the "" vs ', I wanted to show posession and didn't want to deal with the symbol stuff for python
+            help = "Given a search string S, print a list of authors whose names contain S (case-insensitive). For each such author, print a list of the author's books.",
+            default  = '',
+            nargs='?',
 
-def print_usage():
-     with open("usage.txt") as f:
-        print (f.read())
+        )
+        #parsing for date search
+        date_search = subparsers.add_parser('datesearch',help = 'Given a range of years A to B, print a list of books published between years A and B')
+        date_search.add_argument(
+            'datesearch',
+            help = "Given a range of years A to B, print a list of books published between years A and B. If a start date is not given, it searches for books that are before the end date, and if an end date is not given, then it searches for books after the start date.If neither are given, all books will be published in increasing order of date",
+            default  = '',
+            nargs='?',
+        )
+        date_search.add_argument(
+            '--startdate','-s',
+            help = 'date to start the list with',
+            default = None, 
 
-
-
-#print(args)
-#print("Argument List:", str(sys.argv))
->>>>>>> c86656bb8a2fd2bb1e23a7aba1688e2a5367a4e6
+        )
+        date_search.add_argument(
+            '--enddate','-e',
+            help = 'date to end the list with',
+            default = None
+        )
+        args = parser.parse_args()
+        return args
+    def handle_arguements(self, arguments):
+        #Each of the three programmed in options, help is built into argsparse for python
+        if('titlesearch' in arguments):
+            self.titlesearch_return(arguments)
+        elif('authorsearch' in arguments ):
+            self.authorsearch_return(arguments)
+        elif('datesearch' in arguments):
+            self.datesearch_return(arguments)
+        else:
+            raise ValueError('some command must be inputted, please enter one of (titlsearch, datesearch, authorsearch, --help) to continue')
+    def titlesearch_return(self, arguments):
+        #if -y is called, sort by date, otherwise sort by title
+        if(arguments.y):
+            print(self.data_source.books(arguments.titlesearch, sort_by='year'))
+        else:
+            print(self.data_source.books(arguments.titlesearch))
+    def authorsearch_return(self, arguments):
+        #Print out the authors and the books they wrote
+        author_list = self.data_source.authors(arguments.authorsearch)
+        for a in author_list:
+            print(str(a) + " Books Written:" + str(self.data_source.search_books_by_author(a)))
+    def datesearch_return(self, arguments):
+        #Print out the books between the given years
+        print(self.data_source.books_between_years(arguments.startdate, arguments.enddate))
+if __name__ == '__main__':
+    b = Books()

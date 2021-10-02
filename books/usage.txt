@@ -7,11 +7,11 @@ The different options for commands are as follows
 
 
 Name
-	--authorsearch, -as  -- list authors whose name contains a certain character or character string
+	authorsearch  -- list authors whose name contains a certain character or character string
  
 Synopsis
 
-	python3 books.py -as [OPTION] [TARGET STRING]
+	python3 books.py authorsearch [TARGET STRING]
 
 Description
 	
@@ -21,10 +21,10 @@ Description
 
 Name 
 
-	--titlesearch or -ts - search for titles containing a given string
+	titlesearch or - search for titles containing a given string
 Synopsis
 	
-	python3 books.py -ts [OPTION] [TARGET WORD] 
+	python3 books.py titlesearch [TARGET WORD] [OPTION]
 
 Description
 
@@ -34,10 +34,8 @@ Description
 	The following options are available
 
 
-	-t, --sorttitle,
-		sort entries alphabetically by title
-	-d, --sortdate
-		sort entries in increasing order of date
+	-y
+		sort entries in increasing order of publication year
 
 
 
@@ -46,7 +44,7 @@ Name
 
 Synopsis
 
-	python3 books.py --help [FUNCTION]
+	python3 books.py [FUNCTION] --help 
 
 Description 
 
@@ -56,14 +54,21 @@ Description
 
 Name
 
-	--datesearch or -ds - search for titles between two given dates
+	datesearch or - search for titles between two given dates, books are output in increasing order of date. 
 
 Synopsis
 
-	python3 books.py -ds [OPTION] [START DATE] [END DATE] 
+	python3 books.py datesearch -s [START DATE]  -e [END DATE] 
  
 Description
 
 	Given a range of years A to B, print a list of books published between years A and B. If a start date is not given, 
-	it searches for books that are before the end date, and if an end date is not given, then it searches for books after the start date
+	it searches for books that are before the end date, and if an end date is not given, then it searches for books after the start date.
+	If neither are given, all books will be published in increasing order of date
+
+	The following options are available
+
+	-s, --startdate Specify the start date, unless this is specified it will be 0
+	-e, --enddate
+
 

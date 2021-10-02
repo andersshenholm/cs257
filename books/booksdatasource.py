@@ -1,10 +1,9 @@
 #!/usr/bin/env python3
 '''
-    booksdatasource.py
-    Jeff Ondich, 21 September 2021
+    booksdatasourcetest.py
+    10/2/2021
 
-    For use in the "books" assignment at the beginning of Carleton's
-    CS 257 Software Design class, Fall 2021.
+    Simon Hempel-Costello, Anders Shenholm
 '''
 
 import csv
@@ -18,8 +17,9 @@ class Author:
     def __eq__(self, other):
         ''' For simplicity, we're going to assume that no two authors have the same name. '''
         return self.surname == other.surname and self.given_name == other.given_name
+    #basic string formatting for the printouts to make my life easy
     def __str__(self) -> str:
-        return self.surname + "," + self.given_name + ",(" +str(self.birth_year) + "-"+ str(self.death_year) +")"
+        return "{"+ self.surname + "," + self.given_name + ",(" +str(self.birth_year) + "-"+ str(self.death_year) +")"+"}"
     def __repr__(self) -> str:
         return self.__str__()
     def given_name(self):
@@ -30,6 +30,7 @@ class Author:
         return self.death_year
     def surname(self):
         return self.surname
+
 
 class Book:
     def __init__(self, title='', publication_year=None, authors=[]):
@@ -44,9 +45,9 @@ class Book:
             no two books have the same title, so "same title" is the same
             thing as "same book". '''
         return self.title == other.title
-
+    #basic string formatting for printouts to make my life easy
     def __str__(self) -> str:
-        return self.title + "," + str(self.publication_year) + "," + str(self.authors)
+        return "{"+self.title + "," + str(self.publication_year) + ",Author(s):" + str(self.authors)+"} " + '\n'
     def __repr__(self) -> str:
         return self.__str__()
     def title(self):
@@ -58,19 +59,6 @@ class Book:
 
 class BooksDataSource:
     def __init__(self, books_csv_file_name):
-        #want to parse csv for all info needed for below methods (4 things for each other, 3 for each book)     
-        #wrote code not considering having to iterate through lines
-        #any reason publication_year should be int? 
-        # in response to this I think comparison would be easier for date sort, but not necessarily
-        #authors
-	    #author first name
-        #author last name
-	    #author birthdate
-	    #author deathdate
-
-	    #make a book object
-        #make an author object	
-
         ''' The books CSV file format looks like this:
 
                 title,publication_year,author_description
@@ -84,41 +72,57 @@ class BooksDataSource:
             suitable instance variables for the BooksDataSource object containing
             a collection of Author objects and a collection of Book objects.
         '''
+        #create two lists
         self.book_list = []
         self.author_list = []
+        #then open the given file
         with open(books_csv_file_name) as file:
             csvreader = csv.reader(file)
+            #for each line
             for row in csvreader:
+                #take each author entry in the csv file and parse it into a list of authors dealing with the potential for ands
                 input_authors = self.parse_authors_from_csv_entry(row[2])
                 for a in input_authors:
                     if(a not in self.author_list):
+                        #if the author isn't in the list add it
                         self.author_list.append(a)
+                #create a book from the other two parts of the csv, and feed it the list generated from the authors
                 input_book = Book(row[0],int(row[1]),input_authors)
+                #add the book to the book list
                 self.book_list.append(input_book)
         pass
     def parse_authors_from_csv_entry(self, input_entry):
-        #TODO add comments explaining what on gods green earth is going on here. 
-        and_substring = 'and'
+        and_substring = ' and '
+        #lenght of and + 1 for spacing
+        and_offset = len(and_substring)
+        #new empty list
         author_list = []
         if and_substring in input_entry:
-            and_offset = 4
+            #create a string which is the input up until the first and
             pre_and_substring = input_entry[:input_entry.index(and_substring)]
+            #create a string which is the input after the first and
             post_and_substring = input_entry[input_entry.index(and_substring) + and_offset:]
+            #Since we now know that the pre string is only one author, as each author is seperated by an and, then we can generate an author from the pre string
             pre_string_author = self.author_from_string(pre_and_substring)
+            #add that author to the list
             author_list.append(pre_string_author)
+            #check if the post substring still contains ands, and if it does, run this method again on that and extend our author list with the return
             if(and_substring in post_and_substring):
                 #BROOOOOOOOOOOOO RECURSION AND IT WORKS! RECURSIVE STRING SANITATION!
                 author_list.extend(self.parse_authors_from_csv_entry(post_and_substring))
             else:
+                #otherwise, just add the rest to the list as another author object
                 post_string_author = self.author_from_string(post_and_substring)
                 author_list.append(post_string_author)
         else:
+            #if there is no and, just add the string to the list as an author object
             input_author = self.author_from_string(input_entry)
 
             author_list.append(input_author)
         return author_list
 
     def author_from_string(self, input_string):
+        #bascially parse the string so that the first space delineates the first name, and the birth and death dates are delineated by the ( and - characters
         author  = Author(input_string[input_string.index(" ")+1:input_string.index("(")-1], input_string[:input_string.index(" ")], (input_string[input_string.index("(")+1 : input_string.index("-")]), (input_string[input_string.index("-")+1 : input_string.index(")")]))
         return author
 
@@ -128,21 +132,31 @@ class BooksDataSource:
             returns all of the Author objects. In either case, the returned list is sorted
             by surname, breaking ties using given name (e.g. Ann Brontë comes before Charlotte Brontë).
         '''
+        #take your input text
         input_text = ''
         if(search_text!=None):
+            #put it all to lower case to make it case insensitive
             input_text = search_text.lower()
 
         output_list = []
+        #for each author
         for a in self.author_list:
-            last_name = a.surname.lower()
-            first_name = a.given_name.lower()
-            if(input_text in last_name or input_text in first_name):
+            #combine the two names to make the authors full name
+            full_name = a.given_name.lower() + a.surname.lower()
+            #check if the name is this full name
+            if(input_text in full_name):
                 output_list.append(a)
+
+        #okay this is kinda jank, but it seems to work. We just sort the author list by given names first and, 
+        #since the python sorting algorithm seems to try and maintain relative order when sorting by surname, 
+        # those with a earlier given name are put first, without any real work on my part. 
+        #I realize that on a O(n) level, it is probably a terrible method, and there is almost definitely some edge case where it doesn't work
+        #but until then im keeping it
         output_list = sorted(output_list, key = Author.given_name)
         output_list = sorted(output_list, key = Author.surname)
+
         return output_list
 
-        pass
 
 
     def books(self, search_text=None, sort_by='title'):
@@ -159,12 +173,15 @@ class BooksDataSource:
         '''
         input_text = ''
         if(search_text!=None):
+            #put text to lower case for case insensitivity
             input_text = search_text.lower()
         output_list = []
         for b in self.book_list:
+            #title also to lower case
             title = b.title.lower()
             if(input_text in title):
                 output_list.append(b)
+        #sorting books by title or by year given the tag
         if(sort_by == "year"):
             output_list = sorted(output_list, key = Book.publication_year)
         else:
@@ -181,23 +198,34 @@ class BooksDataSource:
             during start_year should be included. If both are None, then all books
             should be included.
         '''
-        end_date = 2021 #random future year
-        start_date = 0
-        if(end_year != None):
-            end_date = int(end_year)
-        if(start_year != None):
-            start_date = int(start_year)
-       
+        end_date = 1000000 #random future year, if this program is still in use by 1000000 a.d let me know and I will update it. 
+        start_date = -1000000 #random past year
 
+        #sanitize to make sure we are getting dates
+        try:
+            if(end_year != None):
+                end_date = int(end_year)
+            if(start_year != None):
+                start_date = int(start_year)
+        except ValueError:
+            raise ValueError("Integer Numbers must be inputted as dates")
+        #make sure that times match up
+        if(start_date>end_date):
+            raise ValueError("Start date must be before end date")
         output_list = []
         for b in self.book_list:
+            #if its within those two dates, add it to the list
             if(b.publication_year>= start_date and b.publication_year <= end_date):
                 output_list.append(b)
-        #TODO verify that this not only seems to work but actually works, done with test2.csv, but further tests would be appreciated
+        #see my comment about this for the authors method, I know it's jank and probably fails somewhere, but it seems to work in every case I tested
         output_list = sorted(output_list, key = Book.title)
-        output_list = sorted(output_list, key=Book.publication_year)
-        
-                
+        output_list = sorted(output_list, key=Book.publication_year)        
+        return output_list
+    def search_books_by_author(self, author):
+        output_list = []
+        for b in self.all_books():
+            if(author in  b.authors):
+                output_list.append(b.title)
         return output_list
 
     def all_books(self):

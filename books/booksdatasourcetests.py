@@ -1,6 +1,8 @@
 '''
-   booksdatasourcetest.py
-    Simon Hempel-Costello, Anders Shenholm, 24 September 2021
+    booksdatasourcetest.py
+    10/2/2021
+
+    Simon Hempel-Costello, Anders Shenholm
 '''
 
 import booksdatasource
@@ -107,6 +109,8 @@ class BooksDataSourceTester(unittest.TestCase):
         self.assertTrue(books[0] == booksdatasource.Book('Boys and Sex',2020,author_list_orenstein) and books[1] ==booksdatasource.Book('The Invisible Life of Addie LaRue',2020,author_list_schwab))
     def test_bad_date_input(self):
         self.assertRaises(ValueError, self.data_source.books_between_years, "asdfadsadfs")
+    def test_reversed_dates(self):
+        self.assertRaises(ValueError, self.data_source.books_between_years,start_year=2021, end_year = 1900)
 if __name__ == '__main__':
     unittest.main()
 
