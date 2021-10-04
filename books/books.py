@@ -1,5 +1,5 @@
 '''
-    booksdatasourcetest.py
+    books.py
     10/2/2021
 
     Simon Hempel-Costello, Anders Shenholm
@@ -7,7 +7,6 @@
 import booksdatasource
 import sys
 import argparse
-import sys
 class Books:
 
     def __init__(self):
