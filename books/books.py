@@ -51,7 +51,7 @@ class BooksInterface():
         self.start_date_help = 'date to start the list with'
         self.end_date_help = 'date to end the list with'
 
-    def get_arguements(self):
+    def get_arguments(self):
         parser = argparse.ArgumentParser('handle books commands')
         subparsers = parser.add_subparsers(description = 'commands')
         #Break parsing into 3 subparsers for explicity in code definition
@@ -104,7 +104,7 @@ class BooksInterface():
 
 if __name__ == '__main__':
     book_interface = BooksInterface()
-    arguments = book_interface.get_arguements()
+    arguments = book_interface.get_arguments()
     book_search = BooksSearch('books1.csv')
     output = ''
     if('titlesearch' in arguments):
