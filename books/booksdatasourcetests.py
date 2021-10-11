@@ -3,6 +3,8 @@
     10/2/2021
 
     Simon Hempel-Costello, Anders Shenholm
+    Revised by Simon Hempel-Costello
+
 '''
 
 import booksdatasource
@@ -14,9 +16,11 @@ class BooksDataSourceTester(unittest.TestCase):
 
     def tearDown(self):
         pass
+
     def test_unique_author_len(self):
         authors = self.data_source.authors('Pratchett')
         self.assertTrue(len(authors) == 1)
+
     def test_unique_author_name(self):
         authors = self.data_source.authors('Pratchett')
         self.assertTrue(authors[0] == booksdatasource.Author('Pratchett', 'Terry'))
@@ -86,6 +90,7 @@ class BooksDataSourceTester(unittest.TestCase):
     def test_non_unique_author_len(self):
         authors = self.data_source.authors('Brontë')
         self.assertTrue(len(authors) == 3)
+
     def test_non_unique_author_name(self):
         authors = self.data_source.authors('Brontë')
         self.assertTrue(authors[0] == booksdatasource.Author('Brontë', 'Ann')and authors[1] == booksdatasource.Author('Brontë', 'Charlotte') and authors[2] ==booksdatasource.Author('Brontë', 'Emily'))
@@ -107,10 +112,13 @@ class BooksDataSourceTester(unittest.TestCase):
         author_orenstein = booksdatasource.Author('Orenstein', 'Peggy')
         author_list_orenstein = [author_orenstein]
         self.assertTrue(books[0] == booksdatasource.Book('Boys and Sex',2020,author_list_orenstein) and books[1] ==booksdatasource.Book('The Invisible Life of Addie LaRue',2020,author_list_schwab))
+
     def test_bad_date_input(self):
         self.assertRaises(ValueError, self.data_source.books_between_years, "asdfadsadfs")
+
     def test_reversed_dates(self):
         self.assertRaises(ValueError, self.data_source.books_between_years,start_year=2021, end_year = 1900)
+
 if __name__ == '__main__':
     unittest.main()
 
