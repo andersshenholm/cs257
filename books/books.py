@@ -3,7 +3,7 @@
     10/2/2021
 
     Simon Hempel-Costello, Anders Shenholm
-    Revised by Simon Hempel-Costello
+    Revised by Simon Hempel-Costello, Anders Shenholm
 '''
 import booksdatasource
 import sys
