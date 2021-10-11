@@ -4,7 +4,7 @@ Usage:
 	python3 books.py authorsearch [TARGET STRING]
 	python3 books.py titlesearch [TARGET STRING] [OPTION]
 	python3 books.py datesearch -s [START DATE]  -e [END DATE]
-	python3 books.py [FUNCTION] --help
+	python3 books.py -h --help
 
 
 The different options for commands are as follows:
