@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 '''
-    booksdatasourcetest.py
-    10/2/2021
+    booksdatasource.py
+    10/11/2021
 
     Simon Hempel-Costello, Anders Shenholm
     Revised by Simon Hempel-Costello
@@ -56,7 +56,7 @@ class Book:
             thing as "same book". '''
         return self.title == other.title
 
-    #basic string formatting for printouts to make my life easy
+    #basic string formatting for printouts
     def __str__(self) -> str:
         return self.title + "," + str(self.publication_year) + ",Author(s):" + str(self.authors)
 
