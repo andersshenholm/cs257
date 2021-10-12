@@ -1,16 +1,17 @@
 Authors: Anders Shenholm, Simon Hempel-Costello
+Revised by: Anders Shenholm, Simon Hempel-Costello
 
 Usage: 
 	python3 books.py authorsearch [TARGET STRING]
-	python3 books.py titlesearch [TARGET STRING] [OPTION]
+	python3 books.py titlesearch [TARGET STRING] (-y)
 	python3 books.py datesearch -s [START DATE]  -e [END DATE]
-	python3 books.py -h --help
+	python3 books.py -h OR python3 books.py --help
 
 
 The different options for commands are as follows:
 
 Name
-	authorsearch or as -- list authors whose name contains a certain character or character string
+	authorsearch - list authors whose name contains a certain string
 Synopsis
 	python3 books.py authorsearch [TARGET STRING]
 Description
@@ -18,9 +19,9 @@ Description
 
 
 Name 
-	titlesearch or ts - search for titles containing a given string
+	titlesearch - search for titles containing a given string
 Synopsis	
-	python3 books.py titlesearch [TARGET STRING] [OPTION]
+	python3 books.py titlesearch [TARGET STRING] (-y)
 
 Description
 	Given a search string S, print a list of books whose titles contain S (case-insensitive). 
@@ -28,18 +29,11 @@ Description
  
 	The following options are available:
 	
-	-y: sort entries in increasing order of publication year
+	-y, --year: sort entries in increasing order of publication year
 
-
-Name 
-	--help, -h - display the basic description of commands and common use cases
-Synopsis
-	python3 books.py [FUNCTION] --help 
-Description 
-	help prints a description of the specified command with usage information.
 
 Name
-	datesearch or ds - search for titles between two given dates, books are output in increasing order of date. 
+	datesearch - search for titles between two given dates
 Synopsis
 	python3 books.py datesearch -s [START DATE]  -e [END DATE] 
 Description
@@ -50,5 +44,15 @@ it searches for books that are before the end date, and if an end date is not gi
 
 	-s, --startdate specify the start date
 	-e, --enddate specify the end date
+
+
+Name 
+	--help, -h - display the basic description of commands and common use cases
+Synopsis
+	python3 books.py -h 
+Description 
+	Help prints out usage information for commands and essential details about their use.
+
+
 
 
