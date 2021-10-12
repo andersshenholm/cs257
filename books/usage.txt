@@ -38,7 +38,7 @@ Synopsis
 	python3 books.py datesearch -s [START DATE]  -e [END DATE] 
 Description
 	Given a range of years A to B, print a list of books published between years A and B. If a start date is not given, 
-it searches for books that are before the end date, and if an end date is not given, then it searches for books after the start date. If neither are given, all books will be published in increasing order of date
+it searches for books that are before the end date, and if an end date is not given, then it searches for books after the start date. 
 
 	The following options are available
 
