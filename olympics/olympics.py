@@ -11,10 +11,6 @@ import argparse
 import psycopg2
 import config
 
-#TODO: 
-#close connections, cursors, all that
-#add comments/organize code
-
 
 def get_args():
     parser_description = "this object parses command line arguments for the olympics database search"
@@ -152,5 +148,7 @@ def main():
         ranknocs(connection)
     if args.athletes:
         athletes(connection, args)
+        
+    connection.close()
     
 main()
