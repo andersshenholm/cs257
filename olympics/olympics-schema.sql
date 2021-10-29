@@ -6,17 +6,20 @@ The database design assumes that an athletes height, weight, sex, age, team, and
 Setting up database:
 */
 CREATE TABLE nocs (
+    id integer,
     noc text,
     region text,
     notes text
 );
 
 CREATE TABLE events (
+    id integer,
     event text,
     sport text
 );
 
 CREATE TABLE games (
+    id integer,
     games text,
     year integer,
     season text,
